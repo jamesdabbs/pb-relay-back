@@ -8,13 +8,17 @@ gem 'jbuilder', '~> 2.5'
 gem 'pg', '~> 0.18'
 gem 'pry-rails'
 gem 'puma', '~> 3.0'
+gem 'rack-cors'
 gem 'sass-rails', '~> 5.0'
 gem 'slim-rails'
 gem 'uglifier', '>= 1.3.0'
 
+gem 'graphql'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'rb-readline'
 
   gem 'listen', '~> 3.0.5'
   gem 'spring'
