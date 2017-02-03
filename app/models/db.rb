@@ -1,47 +1,58 @@
-class Database
-  def initialize
-    @data = {}
+module DB
+  class Space < ApplicationRecord
+    has_many :traits
   end
 
-  def find_space id
-    find Space, id
+  class Property < ApplicationRecord
+    has_many :traits
   end
 
-  def find_property id
-    find Property, id
+  class Trait < ApplicationRecord
+    belongs_to :space
+    belongs_to :property
   end
 
-  def add obj
-    self[obj.class][obj.id.to_s] = obj
+  class Store
+    def initialize
+      @data = {
+        spaces:     {},
+        properties: {},
+        traits:     {},
+        theorems:   {}
+      }
+    end
+
+    def fetch_cached
+      Space.find_each do |s|
+        @data[:spaces][s.id] = { name: s.name }
+      end
+      Property.find_each do |p|
+        @data[:properties][p.id] = { name: p.name }
+      end
+      Traits.find_each do |t|
+        @data[:traits][t.id] = { space_id: t.space_id, property_id: t.property_id, value: value }
+      end
+    end
   end
 
-  private
+  class << self
+    def store
+      @store ||= Store.new
+    end
 
-  def [] klass
-    @data[klass] ||= {}
+    def find_space id
+      s = DB::Space.find id
+      ts = s.traits.includes :property
+
+      traits = ts.map do |t|
+        ::Trait.new t.id, s, t.property, t.value, t.description
+      end
+
+      ::Space.new s.id, s.name, s.description, []
+    end
+
+    def find_property id
+      Property.find id
+    end
   end
-
-  def all klass
-    self[klass].values
-  end
-
-  def find klass, id
-    self[klass][id.to_s]
-  end
-end
-
-DB = Database.new.tap do |d|
-  s = Space.new 1, "Space", "A Space", []
-  p = Property.new 1, "Property", "A Property", []
-
-  traits = [
-    Trait.new(1, s, p, true, "because"),
-    Trait.new(2, s, p, false, "because")
-  ]
-
-  s.traits = traits
-  p.traits = traits
-
-  d.add s
-  d.add p
 end

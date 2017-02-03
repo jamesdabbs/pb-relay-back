@@ -1,0 +1,4 @@
+h1 Queries
+ul
+  - @logs.each do |log|
+    li= link_to log.id, query_path(log)

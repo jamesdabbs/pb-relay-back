@@ -1,1 +1,11 @@
-Space = Struct.new :id, :name, :description, :traits
+class Space < ApplicationRecord
+  has_many :traits
+
+  def self.lookup id
+    find_by(id: id) || find_by(name: id)
+  end
+
+  def slug
+    name
+  end
+end

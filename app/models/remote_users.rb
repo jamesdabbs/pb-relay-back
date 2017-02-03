@@ -1,0 +1,2 @@
+class RemoteUser < ApplicationRecord
+end

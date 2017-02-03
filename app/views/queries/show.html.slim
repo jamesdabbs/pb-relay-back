@@ -1,0 +1,11 @@
+.row
+  .col-md-5
+    h2 Query
+    pre= @log.query
+  .col-md-7
+    - if @log.error
+      h2 Error
+      pre= @log.error
+    - else
+      h2 Result
+      pre= JSON.pretty_generate @log.result

@@ -3,8 +3,8 @@ PropertyType = GraphQL::ObjectType.define do
   description "A property that a space might have - compact, connected, &c."
 
   interfaces [GraphQL::Relay::Node.interface]
+  global_id_field :id
 
-  field :id,          types.String
   field :name,        types.String
   field :slug,        types.String
   field :description, types.String
