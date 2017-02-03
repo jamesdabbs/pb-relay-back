@@ -5,6 +5,10 @@ class Space < ApplicationRecord
     find_by(id: id) || find_by(name: id)
   end
 
+  def uid
+    id
+  end
+
   def slug
     name
   end

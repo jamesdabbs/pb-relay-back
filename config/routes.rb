@@ -7,8 +7,8 @@ Rails.application.routes.draw do
   post 'graphql'        => 'queries#create'
 
   resources :queries, only: [:index, :show] do
-    collection do
-      get :last
+    member do
+      patch :rerun
     end
   end
 end

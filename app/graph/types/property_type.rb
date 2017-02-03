@@ -5,6 +5,7 @@ PropertyType = GraphQL::ObjectType.define do
   interfaces [GraphQL::Relay::Node.interface]
   global_id_field :id
 
+  field :uid,         types.String
   field :name,        types.String
   field :slug,        types.String
   field :description, types.String

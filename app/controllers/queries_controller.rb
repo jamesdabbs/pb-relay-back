@@ -4,16 +4,20 @@ class QueriesController < ApplicationController
   end
 
   def show
-    @log = QueryLog.find params[:id]
-  end
-
-  def last
-    @log = QueryLog.last
-    render :show
+    @log = if params[:id] == 'last'
+      QueryLog.last
+    else
+      QueryLog.find params[:id]
+    end
   end
 
   def create
     query params[:query]
+  end
+
+  def rerun
+    log = QueryLog.find params[:id]
+    render json: log.rerun
   end
 
   def schema
