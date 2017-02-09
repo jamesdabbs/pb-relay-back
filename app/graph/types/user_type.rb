@@ -2,9 +2,18 @@ UserType = GraphQL::ObjectType.define do
   name 'User'
   description 'A site user'
 
-  connection :spaces,     SpaceType.connection_type
-  connection :properties, PropertyType.connection_type
-  connection :traits,     TraitType.connection_type
+  field :spaces,     types[SpaceType]
+  field :properties, types[PropertyType]
+  field :traitTable, types.String do
+    argument :spaceId,    types.String
+    argument :propertyId, types.String
+
+    resolve ->(user, args, ctx) {
+      TraitTable.new(
+        space_id: args[:spaceId], property_id: args[:propertyId]
+      ).to_json
+    }
+  end
 
   # field :trait, TraitType do
   #   argument :spaceId, !types.String

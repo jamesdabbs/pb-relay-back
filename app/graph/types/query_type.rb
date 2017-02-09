@@ -27,11 +27,11 @@ QueryType = GraphQL::ObjectType.define do
     }
   end
 
-  field :trait, TraitType do
-    argument :spaceId, !types.String
-    argument :propertyId, !types.String
-    resolve ->(space, args, ctx) {
-      space.traits.find_by property_id: args[:propertyId]
-    }
-  end
+  # field :trait, TraitType do
+  #   argument :spaceId, !types.String
+  #   argument :propertyId, !types.String
+  #   resolve ->(space, args, ctx) {
+  #     space.traits.find_by property_id: args[:propertyId]
+  #   }
+  # end
 end
