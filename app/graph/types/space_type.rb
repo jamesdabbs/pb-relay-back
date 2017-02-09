@@ -7,29 +7,21 @@ SpaceType = GraphQL::ObjectType.define do
 
   field :uid,         types.String
   field :name,        types.String
-  field :slug,        types.String
+  field :preview,     types.String
   field :description, types.String
 
-  connection :traits, TraitType.connection_type do
-    argument :propertySearch, types.String
+  field :traits, types[TraitType] do
+    argument :propertyName, types.String
 
     resolve ->(space, args, ctx) {
       scope = space.traits
-      if args[:propertySearch]
-        scope = scope.
-                  joins(:property).
-                  where('properties.name ILIKE ?', "%#{args[:propertySearch]}%")
+      scope = if args[:propertyName]
+        prop = Property.find_by name: args[:propertyName]
+        scope.where(property_id: prop.id)
+      else
+        scope.includes(:property)
       end
       scope
-    }
-  end
-
-  field :trait, TraitType do
-    argument :propertyId, !types.String
-    resolve ->(space, args, ctx) {
-      # TODO: clean up
-      p = Property.lookup args[:propertyId]
-      space.traits.find_by property_id: p.id
     }
   end
 end

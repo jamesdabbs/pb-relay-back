@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   resources :queries, only: [:index, :show] do
     member do
-      patch :rerun
+      get :rerun
     end
   end
 end

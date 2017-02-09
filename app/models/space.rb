@@ -12,4 +12,8 @@ class Space < ApplicationRecord
   def slug
     name
   end
+
+  def preview
+    description.split("\n").first
+  end
 end

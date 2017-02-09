@@ -16,8 +16,8 @@ class QueriesController < ApplicationController
   end
 
   def rerun
-    log = QueryLog.find params[:id]
-    render json: log.rerun
+    _, @log = QueryLog.find(params[:id]).rerun
+    render :show
   end
 
   def schema
@@ -28,6 +28,7 @@ class QueriesController < ApplicationController
 
   def query q
     vars = params[:variables] || {}
-    render json: QueryLog.run(TopologySchema, q, variables: vars)
+    result, _ = QueryLog.run(TopologySchema, q, variables: vars)
+    render json: result
   end
 end

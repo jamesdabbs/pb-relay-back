@@ -3,7 +3,7 @@ QueryType = GraphQL::ObjectType.define do
   description 'The query root for this schema'
 
   field :viewer do
-    type UserType
+    type ViewerType
     resolve ->(*_) {
       Viewer.new
     }

@@ -13,4 +13,5 @@ TraitType = GraphQL::ObjectType.define do
     }
   end
   field :description, types.String
+  field :deduced, types.Boolean
 end
