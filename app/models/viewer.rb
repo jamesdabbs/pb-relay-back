@@ -8,6 +8,12 @@ class Viewer
   end
 
   def traits
-    Trait.includes(:space, :property, :value).all
+    Trait.
+      includes(:space, :property, :value).
+      where(space: spaces, property: properties)
+  end
+
+  def theorems
+    Theorem.all
   end
 end

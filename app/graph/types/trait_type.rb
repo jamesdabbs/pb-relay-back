@@ -12,6 +12,13 @@ TraitType = GraphQL::ObjectType.define do
       obj.value.name
     }
   end
+
   field :description, types.String
-  field :deduced, types.Boolean
+  field :deduced,     types.Boolean
+
+  field :proof, types.String do
+    resolve ->(trait, args, ctx) {
+      trait.full_proof
+    }
+  end
 end

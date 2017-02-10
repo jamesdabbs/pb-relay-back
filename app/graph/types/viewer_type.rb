@@ -1,5 +1,6 @@
-byNameOrId = ->(scope) {
+byNameOrId = ->(attr) {
   ->(user, args, ctx) {
+    scope = user.send(attr)
     if args[:uid]
       scope.where(id: args[:uid])
     elsif args[:name]
@@ -14,23 +15,23 @@ ViewerType = GraphQL::ObjectType.define do
   description 'A site user'
 
   field :spaces, types[SpaceType] do
-    argument :uid, types.String
+    argument :uid,  types.String
     argument :name, types.String
 
-    resolve byNameOrId.(Space.all)
+    resolve byNameOrId.(:spaces)
   end
 
   field :properties, types[PropertyType] do
     argument :uid, types.String
     argument :name, types.String
 
-    resolve byNameOrId.(Property.all)
+    resolve byNameOrId.(:properties)
   end
 
   field :theorems, types[TheoremType] do
     argument :uid, types.String
 
-    resolve byNameOrId.(Theorem.all)
+    resolve byNameOrId.(:theorems)
   end
 
   field :traitTable, types.String do
@@ -39,7 +40,9 @@ ViewerType = GraphQL::ObjectType.define do
 
     resolve ->(user, args, ctx) {
       TraitTable.new(
-        space_id: args[:spaceId], property_id: args[:propertyId]
+        user,
+        space_id:    args[:spaceId],
+        property_id: args[:propertyId]
       ).to_json
     }
   end
