@@ -1,4 +1,10 @@
 class Viewer
+  attr_reader :universe
+
+  def initialize universe
+    @universe = universe
+  end
+
   def spaces
     Space.all
   end

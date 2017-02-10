@@ -1,15 +1,16 @@
 byNameOrId = ->(attr) {
-  ->(user, args, ctx) {
-    scope = user.send(attr)
-    if args[:uid]
-      scope.where(id: args[:uid])
-    elsif args[:name]
-      scope.where(name: args[:name])
-    else
-      scope
-    end
+  ->(viewer, args, ctx) {
+    scope = viewer.public_send attr
+
+    opts = {
+      id:   args[:uid],
+      name: args[:name]
+    }.compact
+
+    scope.where(opts)
   }
 }
+
 ViewerType = GraphQL::ObjectType.define do
   name 'Viewer'
   description 'A site user'
@@ -22,7 +23,7 @@ ViewerType = GraphQL::ObjectType.define do
   end
 
   field :properties, types[PropertyType] do
-    argument :uid, types.String
+    argument :uid,  types.String
     argument :name, types.String
 
     resolve byNameOrId.(:properties)
@@ -34,16 +35,16 @@ ViewerType = GraphQL::ObjectType.define do
     resolve byNameOrId.(:theorems)
   end
 
+  # TODO: why can't this be a JSONField?
   field :traitTable, types.String do
-    argument :spaceId,    types.String
-    argument :propertyId, types.String
+    argument :spaceId, types.String
 
-    resolve ->(user, args, ctx) {
-      TraitTable.new(
-        user,
-        space_id:    args[:spaceId],
-        property_id: args[:propertyId]
-      ).to_json
+    resolve ->(viewer, args, ctx) {
+      opts = {
+        space_id: args[:spaceId],
+      }.compact
+
+      viewer.universe.trait_table opts
     }
   end
 end

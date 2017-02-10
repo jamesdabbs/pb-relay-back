@@ -13,7 +13,7 @@ class Theorem < ApplicationRecord
     {
       antecedent: Formula.parse(antecedent),
       consequent: Formula.parse(consequent)
-    }.to_json
+    }
   end
 
   def preview

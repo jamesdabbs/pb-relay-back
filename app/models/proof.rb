@@ -10,23 +10,23 @@ class Proof < ApplicationRecord
       theorems: theorems.map do |t|
         {
           uid:  t.id,
-          name: JSON.parse(t.name)
+          name: t.name
         }
       end,
       traits: traits.includes(:property).map do |t|
         {
-          uid:   t.id,
+          uid: t.id,
           property: {
-            name: t.property.name,
-            uid:  t.property.id
+            uid:  t.property.id,
+            name: t.property.name
           },
-          value: t.value_id == Formula::TrueId
+          value: t.value_id == Universe::TrueId
         }
       end
-    }.to_json
+    }
   end
 
   def to_json
-    Proof.serialize([theorem], traits)
+    Proof.serialize([theorem], traits).to_json
   end
 end

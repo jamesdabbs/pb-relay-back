@@ -16,8 +16,8 @@ class QueriesController < ApplicationController
   end
 
   def rerun
-    _, log = QueryLog.find(params[:id]).rerun
-    redirect_to query_path(log)
+    _, @log = QueryLog.find(params[:id]).rerun
+    render :show
   end
 
   def schema

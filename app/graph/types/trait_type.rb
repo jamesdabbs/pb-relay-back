@@ -16,9 +16,16 @@ TraitType = GraphQL::ObjectType.define do
   field :description, types.String
   field :deduced,     types.Boolean
 
-  field :proof, types.String do
+  field :proof, JSONType do
+    argument :full, types.Boolean
+
     resolve ->(trait, args, ctx) {
-      trait.full_proof
+      if !args[:full]
+        # TODO: why isn't ctx[:viewer] being set sometimes? node entrypoint?
+        Universe.prime.full_proof trait
+      else
+        trait.proof
+      end
     }
   end
 end
