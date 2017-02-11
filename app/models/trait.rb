@@ -1,7 +1,6 @@
-class Trait < ApplicationRecord
-  belongs_to :space
-  belongs_to :property
-  belongs_to :value
-
-  has_one :proof
+class Trait < Dry::Struct
+  attribute :space,       ::Space
+  attribute :property,    ::Property
+  attribute :description, T::String
+  attribute :value,       T::Bool
 end

@@ -1,2 +1,0 @@
-class RemoteUser < ApplicationRecord
-end

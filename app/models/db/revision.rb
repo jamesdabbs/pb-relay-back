@@ -1,4 +1,4 @@
-class Revision < ApplicationRecord
+class DB::Revision < ApplicationRecord
   belongs_to :user, class_name: 'RemoteUser'
 
   # FIXME: have item_class, not item_type

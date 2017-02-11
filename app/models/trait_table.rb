@@ -1,11 +1,11 @@
 class TraitTable
-  def self.build
+  def self.build queries
     traits = {}
 
-    Trait.find_each do |t|
+    queries.all_traits.find_each do |t|
       traits[t.space_id] ||= {}
       traits[t.space_id][t.property_id] = {
-        value:   t.value_id == Universe::TrueId,
+        value:   t.value_id == Universe.true_id,
         deduced: t.deduced
       }
     end

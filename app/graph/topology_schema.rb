@@ -12,7 +12,7 @@ TopologySchema = GraphQL::Schema.define do
 
   resolve_type ->(obj, ctx) {
     {
-      Space => SpaceType
+      DB::Space => SpaceType
     }.fetch obj.class
   }
 end

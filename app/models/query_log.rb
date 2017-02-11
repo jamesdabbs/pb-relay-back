@@ -36,4 +36,11 @@ class QueryLog < ApplicationRecord
     Rails.logger.info "Logging #{id}: #{opts.keys}"
     Rails.logger.silence { update! opts }
   end
+
+  def prev
+    @prev ||= self.class.where('id < ?', id).last
+  end
+  def next
+    @next ||= self.class.where('id > ?', id).first
+  end
 end

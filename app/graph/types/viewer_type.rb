@@ -1,18 +1,14 @@
 byNameOrId = ->(attr) {
   ->(viewer, args, ctx) {
     scope = viewer.public_send attr
-
-    opts = {
+    viewer.filter scope, \
       id:   args[:uid],
       name: args[:name]
-    }.compact
-
-    scope.where(opts)
   }
 }
 
 ViewerType = GraphQL::ObjectType.define do
-  name 'Viewer'
+  name        'Viewer'
   description 'A site user'
 
   field :spaces, types[SpaceType] do

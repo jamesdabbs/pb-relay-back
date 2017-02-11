@@ -7,11 +7,7 @@ TraitType = GraphQL::ObjectType.define do
 
   field :space,    SpaceType
   field :property, PropertyType
-  field :value, ValueEnum do
-    resolve ->(obj, args, ctx) {
-      obj.value.name
-    }
-  end
+  field :value,    ValueEnum
 
   field :description, types.String
   field :deduced,     types.Boolean
@@ -20,11 +16,12 @@ TraitType = GraphQL::ObjectType.define do
     argument :full, types.Boolean
 
     resolve ->(trait, args, ctx) {
-      if !args[:full]
-        # TODO: why isn't ctx[:viewer] being set sometimes? node entrypoint?
-        Universe.prime.full_proof trait
+      # TODO: figure out the right way to customize `QueryType#node` to set this there
+      ctx[:viewer] ||= Viewer.new(Rails.configuration.container.universe)
+      if args[:full]
+        ctx[:viewer].full_proof trait
       else
-        trait.proof
+        ctx[:viewer].short_proof trait
       end
     }
   end

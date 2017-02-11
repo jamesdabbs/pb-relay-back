@@ -11,4 +11,6 @@ Rails.application.routes.draw do
       get :rerun
     end
   end
+
+  root to: 'queries#index'
 end

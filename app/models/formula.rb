@@ -4,7 +4,7 @@ class Formula
     if key == "and" || key == "or"
       { key => val.map { |sub| parse sub } }
     else
-      { propertyId: key, value: val == Universe::TrueId }
+      { propertyId: key, value: val == Universe.true_id }
     end
   end
 end

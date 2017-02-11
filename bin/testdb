@@ -1,0 +1,2 @@
+psql -c "drop database pbql_test"
+psql -c "create database pbql_test with template pi_base_legacy"

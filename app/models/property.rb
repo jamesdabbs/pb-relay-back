@@ -1,17 +1,9 @@
-class Property < ApplicationRecord
-  belongs_to :value_set
+class Property < Dry::Struct
+  attribute :uid,         T::String
+  attribute :name,        T::String
+  attribute :description, T::String.optional
 
-  has_many :traits
-
-  def self.lookup id
-    find_by(id: id) || find_by(name: id)
-  end
-
-  def uid
-    id
-  end
-
-  def slug
-    name.downcase.gsub(/\W+/, '-')
+  def self.from_db p
+    new uid: p.id, name: p.name, description: p.description
   end
 end

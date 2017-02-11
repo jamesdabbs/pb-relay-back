@@ -1,2 +1,0 @@
-class ValueSet < ApplicationRecord
-end

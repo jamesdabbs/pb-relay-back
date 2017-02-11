@@ -1,19 +1,9 @@
-class Space < ApplicationRecord
-  has_many :traits
+class Space < Dry::Struct
+  attribute :uid,         T::String
+  attribute :name,        T::String
+  attribute :description, T::String.optional # TODO: should this be a different type?
 
-  def self.lookup id
-    find_by(id: id) || find_by(name: id)
-  end
-
-  def uid
-    id
-  end
-
-  def slug
-    name
-  end
-
-  def preview
-    description.split("\n").first
+  def self.from_db s
+    new uid: s.id, name: s.name, description: s.description
   end
 end

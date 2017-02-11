@@ -1,11 +1,5 @@
-class Proof < ApplicationRecord
-  belongs_to :trait
-  belongs_to :theorem
-
-  has_many :assumptions
-  has_many :traits, through: :assumptions
-
-  def self.serialize theorems, traits
+class Proof < Struct.new(:theorems, :traits)
+  def as_json *_
     {
       theorems: theorems.map do |t|
         {
@@ -13,20 +7,16 @@ class Proof < ApplicationRecord
           name: t.name
         }
       end,
-      traits: traits.includes(:property).map do |t|
+      traits: traits.map do |t|
         {
           uid: t.id,
           property: {
             uid:  t.property.id,
             name: t.property.name
           },
-          value: t.value_id == Universe::TrueId
+          value: t.value_id == Universe.true_id
         }
       end
     }
-  end
-
-  def to_json
-    Proof.serialize([theorem], traits).to_json
   end
 end

@@ -1,8 +1,10 @@
 .row
   .btn-group
-    = link_to '<', query_path(@log.id - 1), class: 'btn btn-default'
+    - if @log.prev
+      = link_to '<', query_path(@log.prev), class: 'btn btn-default'
     = link_to 'Rerun', rerun_query_path(@log), class: 'btn btn-default'
-    = link_to '>', query_path(@log.id + 1), class: 'btn btn-default'
+    - if @log.next
+      = link_to '>', query_path(@log.next), class: 'btn btn-default'
     = link_to '>>', query_path('last'), class: 'btn btn-default'
 
 .row

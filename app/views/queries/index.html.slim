@@ -1,4 +1,19 @@
 h1 Queries
-ul
-  - @logs.each do |log|
-    li= link_to log.id, query_path(log)
+table.table.table-condensed.table-striped.table-hover
+  thead
+    tr
+      th Id
+      th Error
+      th Query
+      th Vars
+      th Result
+  tbody
+    - @logs.each do |log|
+      tr
+        td= link_to log.id, query_path(log)
+        td
+          - if log.error.present?
+            = 'X'
+        td= log.query.length
+        td= log.variables
+        td= log.result.to_s.length

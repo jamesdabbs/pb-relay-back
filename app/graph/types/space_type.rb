@@ -14,14 +14,7 @@ SpaceType = GraphQL::ObjectType.define do
     argument :propertyName, types.String
 
     resolve ->(space, args, ctx) {
-      scope = space.traits
-      scope = if args[:propertyName]
-        prop = Property.find_by name: args[:propertyName]
-        scope.where(property_id: prop.id)
-      else
-        scope.includes(:property)
-      end
-      scope
+      ctx[:viewer].traits space: space, property_name: args[:propertyName]
     }
   end
 end

@@ -5,7 +5,7 @@ QueryType = GraphQL::ObjectType.define do
   field :viewer do
     type ViewerType
     resolve ->(q, args, ctx) {
-      ctx[:viewer] = Viewer.new(Universe.prime)
+      ctx[:viewer] = Viewer.new(Rails.configuration.container.universe)
     }
   end
 

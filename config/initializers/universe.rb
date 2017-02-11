@@ -1,1 +1,0 @@
-U = Universe.new

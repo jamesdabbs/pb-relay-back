@@ -14,6 +14,7 @@ module Pbql
 
     config.autoload_paths << Rails.root.join('app', 'graph')
     config.autoload_paths << Rails.root.join('app', 'graph', 'types')
+    config.autoload_paths << Rails.root.join('app', 'services')
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
@@ -21,5 +22,8 @@ module Pbql
         resource '*', headers: :any, methods: :any
       end
     end
+
+    require Rails.root.join('app', 'services', 'container')
+    config.container = Container.new
   end
 end
