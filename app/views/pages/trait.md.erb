@@ -1,0 +1,11 @@
+---
+space:    <%= @trait.space.name %>
+property: <%= @trait.property.name %>
+value:    <%= @trait.value.name %>
+---
+
+<% if @trait.deduced? %>
+_Automatically deduced (TODO: add description)_
+<% else %>
+<%= @trait.description %>
+<% end %>

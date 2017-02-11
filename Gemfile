@@ -4,16 +4,15 @@ gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 
 gem 'devise'
 gem 'figaro'
-gem 'jbuilder', '~> 2.5'
+gem 'graphql'
 gem 'pg', '~> 0.18'
 gem 'pry-rails'
 gem 'puma', '~> 3.0'
 gem 'rack-cors'
+gem 'rugged'
 gem 'sass-rails', '~> 5.0'
 gem 'slim-rails'
 gem 'uglifier', '>= 1.3.0'
-
-gem 'graphql'
 
 group :development do
   gem 'better_errors'

@@ -1,0 +1,4 @@
+cd tmp/repo
+git checkout HEAD
+git remote add origin git@github.com:jamesdabbs/pb-data.git
+git push -u --force --no-verify origin master
