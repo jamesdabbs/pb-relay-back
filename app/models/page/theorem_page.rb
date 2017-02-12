@@ -8,7 +8,7 @@ module Page
     end
 
     def initialize theorem
-      @object = @theorem = theorem
+      @theorem = theorem
     end
 
     def path
@@ -16,11 +16,28 @@ module Page
     end
 
     def title
-      @theorem.id
+      @theorem.uid
     end
 
     def contents
-      render :theorem
+      Writer.write do |w|
+        w.frontmatter \
+          uid:        @theorem.uid,
+          antecedent: @theorem.antecedent.map { |p| p.slug }.to_yaml,
+          consequent: @theorem.consequent.map { |p| p.slug }.to_yaml
+        w.section '', @theorem.description
+      end
+    end
+
+    def self.parse path, contents
+      Scanner.scan contents do |s|
+        keys = s.frontmatter :uid, :antecedent, :consequent
+        keys[:antecedent]  = Formula.from_json keys[:antecedent]
+        keys[:consequent]  = Formula.from_json keys[:consequent]
+        keys[:description] = s.section
+
+        Theorem.new keys
+      end
     end
   end
 end

@@ -1,9 +1,11 @@
 require_relative '../models/db/queries'
 
 class Container
-  def initialize reload=false
+  attr_reader :queries
+
+  def initialize queries: nil, reload: false
     @reload  = reload
-    @queries = DB::Queries.new
+    @queries = queries || DB::Queries.new
   end
 
   def universe

@@ -39,4 +39,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  config.container = Container.new(
+    queries: Git::Queries.new(Rails.root.join 'db', 'git', 'test')
+  )
 end

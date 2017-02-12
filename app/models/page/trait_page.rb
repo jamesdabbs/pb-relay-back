@@ -1,19 +1,17 @@
 module Page
   class TraitPage
-    include ApplicationPage
-
     def self.from_revision
       new Trait.new \
-          id:          rev.get("id"),
-          description: rev.get("description")
+        id:          rev.get("id"),
+        description: rev.get("description")
     end
 
     def initialize trait
-      @object = @trait = trait
+      @trait = trait
     end
 
     def path
-      "spaces/#{@trait.space.name}/properties/#{@trait.property.name}.md"
+      "spaces/#{@trait.space.slug}/properties/#{@trait.property.slug}.md"
     end
 
     def title
@@ -21,7 +19,23 @@ module Page
     end
 
     def contents
-      render :trait
+      Writer.write do |w|
+        w.frontmatter \
+          uid:      @trait.uid,
+          space:    @trait.space.slug,
+          property: @trait.property.slug,
+          value:    @trait.value
+        w.section '', @trait.description
+      end
+    end
+
+    def self.parse path, contents
+      Scanner.scan contents do |s|
+        keys = s.frontmatter :uid, :space, :property, :value
+        keys[:description] = s.section
+
+        Trait.new keys
+      end
     end
   end
 end

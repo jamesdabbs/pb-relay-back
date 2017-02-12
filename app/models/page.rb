@@ -1,9 +1,9 @@
 module Page
   Classes = {
-    "Space"    => SpacePage,
-    "Property" => PropertyPage,
-    "Trait"    => TraitPage,
-    "Theorem"  => TheoremPage
+    Space    => SpacePage,
+    Property => PropertyPage,
+    Trait    => TraitPage,
+    Theorem  => TheoremPage
   }
 
   def self.for_revision rev, obj=nil
@@ -11,7 +11,6 @@ module Page
   end
 
   def self.for_object obj
-    klass = Classes[obj.class.name]
-    klass.new obj
+    Classes.fetch(obj.class).new obj
   end
 end

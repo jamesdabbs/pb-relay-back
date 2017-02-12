@@ -3,7 +3,12 @@ class Property < Dry::Struct
   attribute :name,        T::String
   attribute :description, T::String.optional
 
-  def self.from_db p
-    new uid: p.id, name: p.name, description: p.description
+  include Dry::Equalizer(:uid, :name, :description)
+
+  def _id;  uid; end
+  def slug; H.slug name; end
+
+  def to_s
+    %|<Property(#{name})>|
   end
 end

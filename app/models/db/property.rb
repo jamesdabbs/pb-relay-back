@@ -14,4 +14,11 @@ class DB::Property < ApplicationRecord
   def slug
     name.downcase.gsub(/\W+/, '-')
   end
+
+  def to_value
+    ::Property.new \
+      uid:         id,
+      name:        name,
+      description: description
+  end
 end

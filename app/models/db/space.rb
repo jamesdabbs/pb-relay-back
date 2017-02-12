@@ -16,4 +16,12 @@ class DB::Space < ApplicationRecord
   def preview
     description.split("\n").first
   end
+
+  def to_value
+    ::Space.new \
+      uid:               id,
+      name:              name,
+      description:       description,
+      proof_of_topology: proof_of_topology
+  end
 end

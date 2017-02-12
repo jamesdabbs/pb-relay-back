@@ -20,3 +20,4 @@
 /config/application.yml
 /coverage
 /spec/examples.txt
+/db/git

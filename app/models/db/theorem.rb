@@ -19,4 +19,12 @@ class DB::Theorem < ApplicationRecord
   def preview
     description.split("\n").first
   end
+
+  def to_value formula:
+    ::Theorem.new \
+      uid:         id,
+      antecedent:  formula.(antecedent),
+      consequent:  formula.(consequent),
+      description: description
+  end
 end
