@@ -29,11 +29,15 @@ module Page
       end
     end
 
-    def self.parse path, contents
+    def self.parse path, contents, properties:
       Scanner.scan contents do |s|
         keys = s.frontmatter :uid, :antecedent, :consequent
-        keys[:antecedent]  = Formula.from_json keys[:antecedent]
-        keys[:consequent]  = Formula.from_json keys[:consequent]
+        keys[:antecedent] = Formula.
+          from_json(keys[:antecedent]).
+          map { |p| properties.call p }
+        keys[:consequent] = Formula.
+          from_json(keys[:consequent]).
+          map { |p| properties.call p }
         keys[:description] = s.section
 
         Theorem.new keys

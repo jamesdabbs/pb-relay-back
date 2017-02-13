@@ -19,6 +19,12 @@ module Git
       end
     end
 
+    def find_space slug
+      space  = subtree repo.head.target.tree, 'spaces', slug
+      readme = repo.lookup space["README.md"][:oid]
+      Page::SpacePage.parse nil, readme.content
+    end
+
     def all_properties
       props = subtree repo.head.target.tree, 'properties'
       props.enum_for(:each_blob).map do |p|
@@ -27,20 +33,33 @@ module Git
       end
     end
 
+    def find_property slug
+      props = subtree repo.head.target.tree, 'properties'
+      page  = repo.lookup props["#{slug}.md"][:oid]
+      Page::PropertyPage.parse nil, page.content
+    end
+
     def all_theorems
       theorems = subtree repo.head.target.tree, 'theorems'
       theorems.enum_for(:each_blob).map do |t|
         page = repo.lookup t[:oid]
-        Page::TheoremPage.parse t[:name], page.content
+        Page::TheoremPage.parse t[:name], page.content, properties: properties
       end
     end
 
-    def space_traits space
+    def space_traits space, property_name: nil
       traits = subtree repo.head.target.tree, 'spaces', space.slug, 'properties'
       traits.enum_for(:each_blob).map do |t|
+        next if property_name && t[:name] != "#{H.slug(property_name)}.md"
         page = repo.lookup t[:oid]
-        Page::TraitPage.parse t[:name], page.content
-      end
+        Page::TraitPage.parse t[:name], page.content,
+          properties: properties, spaces: spaces
+      end.compact
+    end
+
+    def theorems_by_ids ids
+      warn "Theorem scan"
+      all_theorems.select { |t| ids.include? t.uid }
     end
 
     private
@@ -51,6 +70,24 @@ module Git
         curr = repo.lookup curr[path][:oid]
       end
       curr
+    end
+
+    class Cache
+      def initialize method
+        @method, @store = method, {}
+      end
+
+      def call *args
+        @store[ args ] ||= @method.call(*args)
+      end
+    end
+
+    def properties
+      @_properties ||= Cache.new(method :find_property)
+    end
+
+    def spaces
+      @_spaces ||= Cache.new(method :find_space)
     end
   end
 end

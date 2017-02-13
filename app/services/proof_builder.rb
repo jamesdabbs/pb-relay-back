@@ -4,15 +4,15 @@ class ProofBuilder
     proof_to_trait = {}
     trait_to_proof = {}
     DB::Proof.
-      select(:id, :trait_id, :theorem_id).
-      find_each do |p|
+        select(:id, :trait_id, :theorem_id).
+        find_each do |p|
       proof_to_trait[p.id] = p.trait_id
       trait_to_proof[p.trait_id] = [p.theorem_id, []]
     end
 
     DB::Assumption.
-      select(:id, :proof_id, :trait_id).
-      find_each do |a|
+        select(:id, :proof_id, :trait_id).
+        find_each do |a|
       trait_id = proof_to_trait.fetch a.proof_id
       trait_to_proof.fetch(trait_id).last.push(a.trait_id)
     end

@@ -29,10 +29,13 @@ module Page
       end
     end
 
-    def self.parse path, contents
+    def self.parse path, contents, spaces:, properties:
       Scanner.scan contents do |s|
         keys = s.frontmatter :uid, :space, :property, :value
+        keys[:space]       = spaces.(keys[:space])
+        keys[:property]    = properties.(keys[:property])
         keys[:description] = s.section
+        keys[:deduced]     = false # FIXME
 
         Trait.new keys
       end
